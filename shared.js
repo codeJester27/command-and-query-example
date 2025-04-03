@@ -23,7 +23,7 @@ export class DataStore {
   /**
    * @param {DataStore} dataStore
    */
-  async synchify(dataStore) {
+  async syncify(dataStore) {
     await wait(200);
     dataStore.#data = this.#data.map((x) => ({ ...x }));
   }
@@ -105,7 +105,12 @@ export class DataStore {
         const values = matches[2]
           .split(",")
           .map((x) => x.trim())
-          .map((x) => x.replace(DataStore.VALUE_REGEX, "$<a>"));
+          .map((x) => {
+            if (x.startsWith("'") && x.endsWith("'")) {
+              return x.substring(1, x.length - 1);
+            }
+            return x;
+          });
         const filters = matches[3]
           ? matches[3]
               .split("AND")
@@ -139,23 +144,35 @@ export class DataStore {
 //#endregion data store
 
 export class CommandModel {
-  constructor(dataStore) {
+  constructor(dataStore, synchronizedDataStores = []) {
     /**
      * @type {DataStore}
      */
     this.dataStore = dataStore;
+    /**
+     * @type {DataStore[]}
+     */
+    this.synchronizedDataStores = synchronizedDataStores;
   }
   async updateUser(id, name, role) {
-    return this.dataStore.executeQuery(
-      `UPDATE name, role SET ${name}, ${role} WHERE id = ${id}`
+    await this.dataStore.executeQuery(
+      `UPDATE name, role SET '${name}', '${role}' WHERE id = '${id}'`
     );
+    await this.synchronizeDataStores();
   }
   async createUser(name, role) {
-    return this.dataStore.executeQuery(
+    await this.dataStore.executeQuery(
       `INSERT id, name, role, type VALUES ${Math.floor(
         Math.random() * Number.MAX_SAFE_INTEGER
       )}, '${name}', '${role}', 'user'`
     );
+    await this.synchronizeDataStores();
+  }
+
+  async synchronizeDataStores() {
+    for (const dataStore of this.synchronizedDataStores) {
+      await this.dataStore.syncify(dataStore);
+    }
   }
 }
 

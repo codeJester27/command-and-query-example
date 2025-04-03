@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Command and Query Example Page</title>
+    <style>
+      button {
+        margin: 4px 2px;
+      }
+    </style>
+    <script>
+      var requestNumber = 0;
+      let out;
+
+      function printToOutput(text) {
+        if (!out) {
+          out = document.getElementById("output");
+        }
+        out.textContent += text + "\n";
+      }
+
+      function getUsers() {
+        const myRequestNumber = requestNumber++;
+        printToOutput(`(request #${myRequestNumber}) Querying users...`);
+        fetch("/users")
+          .then((resp) => resp.text())
+          .then((text) => {
+            printToOutput(
+              `(request #${myRequestNumber}) Received users: ${text}`
+            );
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <fieldset>
+      <legend>Queries</legend>
+      <button type="button" id="get-user-button" onclick="getUsers()">
+        Get Users
+      </button>
+      <br />
+      <input placeholder="ID" type="text" id="get-users-id" />
+      <button type="button" id="get-users-button">Get User</button>
+    </fieldset>
+    <fieldset>
+      <legend>Commands</legend>
+      <input placeholder="Name" type="text" id="add-or-update-user" />
+      <input placeholder="Role" type="text" id="add-user" />
+      <br />
+      <button type="button" id="add-user-button">Add User</button>
+      <input placeholder="ID" type="text" id="update-user" />
+      <button type="button" id="update-user-button">Update User</button>
+    </fieldset>
+    <pre id="output"></pre>
+  </body>
+</html>
