@@ -1,0 +1,23 @@
+{
+  "name": "command-and-query-example",
+  "version": "1.0.0",
+  "main": "cqrs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeJester27/command-and-query-example.git"
+  },
+  "author": "Jared",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/codeJester27/command-and-query-example/issues"
+  },
+  "homepage": "https://github.com/codeJester27/command-and-query-example#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "handlebars": "^4.7.8"
+  }
+}
