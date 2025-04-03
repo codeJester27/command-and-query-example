@@ -4,9 +4,8 @@ import { CommandModel, DataStore, QueryModel } from "./shared.js";
 const queryDataStore = new DataStore();
 const commandDataStore = new DataStore();
 const queryModel = new QueryModel(queryDataStore);
-const commandModel = new CommandModel(commandDataStore, [queryDataStore]);
-
-h;
+const commandModel = new CommandModel(commandDataStore);
+commandModel.synchronizedDataStores = [queryDataStore];
 
 const app = express();
 

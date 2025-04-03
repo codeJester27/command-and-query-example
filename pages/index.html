@@ -31,26 +31,80 @@
             );
           });
       }
+
+      function getUser() {
+        const myRequestNumber = requestNumber++;
+        const id = document.getElementById("get-user-id").value;
+        printToOutput(`(request #${myRequestNumber}) Querying user ${id}...`);
+        fetch(`/user/${id}`)
+          .then((resp) => resp.text())
+          .then((text) => {
+            printToOutput(
+              `(request #${myRequestNumber}) Received user: ${text}`
+            );
+          });
+      }
+
+      function addUser() {
+        const myRequestNumber = requestNumber++;
+        const name = document.getElementById("add-or-update-user-name").value;
+        const role = document.getElementById("add-or-update-user-role").value;
+        printToOutput(
+          `(request #${myRequestNumber}) Adding new user ${name}...`
+        );
+        fetch(`/user`, {
+          body: JSON.stringify({ name, role }),
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+        }).then(() => {
+          printToOutput(
+            `(request #${myRequestNumber}) Added new user ${name} successfully!`
+          );
+        });
+      }
+
+      function updateUser() {
+        const myRequestNumber = requestNumber++;
+        const id = document.getElementById("update-user-id").value;
+        const name = document.getElementById("add-or-update-user-name").value;
+        const role = document.getElementById("add-or-update-user-role").value;
+        printToOutput(`(request #${myRequestNumber}) Updating user ${id}...`);
+        fetch(`/user/${id}`, {
+          body: JSON.stringify({ name, role }),
+          headers: { "Content-Type": "application/json" },
+          method: "PUT",
+        }).then(() => {
+          printToOutput(
+            `(request #${myRequestNumber}) Updated user ${id} successfully!`
+          );
+        });
+      }
     </script>
   </head>
   <body>
     <fieldset>
       <legend>Queries</legend>
-      <button type="button" id="get-user-button" onclick="getUsers()">
+      <button type="button" id="get-users-button" onclick="getUsers()">
         Get Users
       </button>
       <br />
-      <input placeholder="ID" type="text" id="get-users-id" />
-      <button type="button" id="get-users-button">Get User</button>
+      <input placeholder="ID" type="text" id="get-user-id" />
+      <button type="button" id="get-user-button" onclick="getUser()">
+        Get User
+      </button>
     </fieldset>
     <fieldset>
       <legend>Commands</legend>
-      <input placeholder="Name" type="text" id="add-or-update-user" />
-      <input placeholder="Role" type="text" id="add-user" />
+      <input placeholder="Name" type="text" id="add-or-update-user-name" />
+      <input placeholder="Role" type="text" id="add-or-update-user-role" />
       <br />
-      <button type="button" id="add-user-button">Add User</button>
-      <input placeholder="ID" type="text" id="update-user" />
-      <button type="button" id="update-user-button">Update User</button>
+      <button type="button" id="add-user-button" onclick="addUser()">
+        Add User
+      </button>
+      <input placeholder="ID" type="text" id="update-user-id" />
+      <button type="button" id="update-user-button" onclick="updateUser()">
+        Update User
+      </button>
     </fieldset>
     <pre id="output"></pre>
   </body>

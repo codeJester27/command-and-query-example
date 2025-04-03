@@ -145,13 +145,7 @@ export class DataStore {
 
 export class CommandModel {
   constructor(dataStore, synchronizedDataStores = []) {
-    /**
-     * @type {DataStore}
-     */
     this.dataStore = dataStore;
-    /**
-     * @type {DataStore[]}
-     */
     this.synchronizedDataStores = synchronizedDataStores;
   }
   async updateUser(id, name, role) {
@@ -178,9 +172,6 @@ export class CommandModel {
 
 export class QueryModel {
   constructor(dataStore) {
-    /**
-     * @type {DataStore}
-     */
     this.dataStore = dataStore;
   }
   async getUser(id) {
